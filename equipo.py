@@ -16,7 +16,7 @@ class Equipo(object):
 		self.prob_encajar = probabilidades['encajar']
 		self.prob_pase = probabilidades['pase']
 
-	def hacer_pase(self):
+	def hacer_pases(self):
 		exitoso = True
 		cont_pase = 0
 
