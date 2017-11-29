@@ -78,7 +78,37 @@ def jugar(Equipo1, Equipo2):
 	# No esperara a que terminen de ejecutarse los hilos "hijos" y el programa terminara antes.
 	hilo_equipo1.join()
 	hilo_equipo2.join()
-	
+
+def sorteo_saque(equipo1, equipo2):
+	lista = [equipo1, equipo2]
+	ganador_sorteo = random.choice(lista)
+
+	if ganador_sorteo.nombre == equipo1.nombre:
+		equipos = {'gano_balon': equipo1, 'gano_cancha': equipo2}
+	else:
+		equipos = {'gano_balon': equipo2, 'gano_cancha': equipo1}
+
+	return equipos
+
+def tiempo_de_juego(saca_primero, defiende_primero, duracion):
+	starttime=time.time()
+	tiempo = 0
+	# creo la barra de progreso
+	bar = progressbar.ProgressBar(widgets=[
+        progressbar.Percentage(),
+        progressbar.Bar(),
+    ], max_value=100).start()
+
+	# hacemos que el juego tarde aproximadamente 10seg en simularse.
+	while tiempo < duracion:
+		time.sleep(0.3 - ((time.time() - starttime) % 0.3))
+
+		jugar(saca_primero, defiende_primero)
+		
+		tiempo = time.time() - starttime
+		bar += 2.8
+	bar.finish() # Para que finalice la barra de progreso
+
 def resultados_finales(equipo1, equipo2):
 	print("="*16)
 	print("FINAL DEL PARTIDO")
@@ -99,22 +129,12 @@ if __name__ == '__main__':
 	probabilidades = porcenajes_ranking(ranking_eqB)
 	eqB.cargar_probabilidades(probabilidades)
 
-	starttime=time.time()
-	tiempo = 0
-	# creo la barra de progreso
-	bar = progressbar.ProgressBar(widgets=[
-        progressbar.Percentage(),
-        progressbar.Bar(),
-    ], max_value=100).start()
+	result_sorteo = sorteo_saque(eqA, eqB)
 
-	# hacemos que el juego tarde aproximadamente 10seg en simularse.
-	while tiempo < 10:
-		time.sleep(0.3 - ((time.time() - starttime) % 0.3))
+	saca_primero = result_sorteo["gano_balon"]
+	defiende_primero = result_sorteo["gano_cancha"]
 
-		jugar(eqA,eqB)
-		
-		tiempo = time.time() - starttime
-		bar += 2.8
-	bar.finish() # Para que finalice la barra de progreso
+	tiempo_de_juego(saca_primero, defiende_primero, 10)
 	
 	resultados_finales(eqA, eqB) # Mostramos el resultado final del partido.
+	
