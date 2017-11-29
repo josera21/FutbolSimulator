@@ -13,23 +13,8 @@ def valid_ranking(ranking):
 	else:
 		while not(ranking.isdigit() and 1 <= int(ranking) < 100):
 			print("Por favor introduce un numero valido.")
-			ranking = input("Ranking (numero del 1-100): ")
+			ranking = input("Ranking (numero del 1-99): ")
 		return ranking
-
-def porcenajes_ranking(ranking):
-	"""Verifico en que rango esta el ranking para retornar las probabilidades indicadas"""
-	ranking = int(ranking)
-
-	if 1 <= ranking <= 10:
-		return {'ganar': 0.75, 'anotar': 0.60, 'encajar': 0.20, 'pase':0.60}
-	elif 11 <= ranking <= 20:
-		return {'ganar': 0.60, 'anotar': 0.50, 'encajar': 0.30, 'pase':0.50}
-	elif 21 <= ranking <= 30:
-		return {'ganar': 0.50, 'anotar': 0.40, 'encajar': 0.40, 'pase':0.40}
-	elif 31 <= ranking <= 40:
-		return {'ganar': 0.40, 'anotar': 0.30, 'encajar': 0.45, 'pase':0.35}
-	else:
-		return {'ganar': 0.30, 'anotar': 0.25, 'encajar': 0.50, 'pase':0.30}
 
 def cargar_informacion():
 	# Es el primer metodo que se ejecuta, aqui cargamos toda la informacion del partido
@@ -38,10 +23,10 @@ def cargar_informacion():
 	print("## Ingrese la informacion del partido ##")
 
 	equipoA = input("Nombre del equipo local: ")
-	ranking_eqA = valid_ranking(input("Ranking (numero del 1-100): "))
+	ranking_eqA = valid_ranking(input("Ranking (numero del 1-99): "))
 
 	equipoB = input("Nombre del equipo visitante: ")
-	ranking_eqB = valid_ranking(input("Ranking (numero del 1-100): "))
+	ranking_eqB = valid_ranking(input("Ranking (numero del 1-99): "))
 
 	fecha = input("Fecha del partido: ")
 	hora = input("Hora del partido: ")
@@ -97,16 +82,16 @@ def tiempo_de_juego(saca_primero, defiende_primero, duracion):
 	bar = progressbar.ProgressBar(widgets=[
         progressbar.Percentage(),
         progressbar.Bar(),
-    ], max_value=100).start()
+    ], max_value=duracion).start()
 
 	# hacemos que el juego tarde aproximadamente 10seg en simularse.
 	while tiempo < duracion:
-		time.sleep(0.3 - ((time.time() - starttime) % 0.3))
+		time.sleep(1 - ((time.time() - starttime) % 1))
 
 		jugar(saca_primero, defiende_primero)
 		
 		tiempo = time.time() - starttime
-		bar += 2.8
+		bar.update(int(tiempo))
 	bar.finish() # Para que finalice la barra de progreso
 
 def resultados_finales(equipo1, equipo2):
@@ -123,18 +108,15 @@ if __name__ == '__main__':
 	eqA = Equipo(equipoA, ranking_eqA)
 	eqB = Equipo(equipoB, ranking_eqB)
 
-	probabilidades = porcenajes_ranking(ranking_eqA)
-	eqA.cargar_probabilidades(probabilidades)
-
-	probabilidades = porcenajes_ranking(ranking_eqB)
-	eqB.cargar_probabilidades(probabilidades)
+	eqA.cargar_probabilidades()
+	eqB.cargar_probabilidades()
 
 	result_sorteo = sorteo_saque(eqA, eqB)
 
 	saca_primero = result_sorteo["gano_balon"]
 	defiende_primero = result_sorteo["gano_cancha"]
 
-	tiempo_de_juego(saca_primero, defiende_primero, 10)
+	tiempo_de_juego(saca_primero, defiende_primero, 50)
 	
 	resultados_finales(eqA, eqB) # Mostramos el resultado final del partido.
 	

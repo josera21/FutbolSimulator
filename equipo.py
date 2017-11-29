@@ -6,15 +6,29 @@ class Equipo(object):
 	def __init__(self, nombre, ranking):
 		super(Equipo, self).__init__()
 		self.nombre = nombre
-		self.ranking = ranking
+		self.ranking = int(ranking)
 		self.goles = 0
 		self.fallidos = 0
 	
-	def cargar_probabilidades(self, probabilidades):
+	def cargar_probabilidades(self):
+		probabilidades = self.__porcentajes_ranking()
+
 		self.prob_ganar = probabilidades['ganar']
 		self.prob_anotar = probabilidades['anotar']
 		self.prob_encajar = probabilidades['encajar']
 		self.prob_pase = probabilidades['pase']
+
+	def __porcentajes_ranking(self):
+		if 1 <= self.ranking <= 10:
+			return {'ganar': 0.75, 'anotar': 0.60, 'encajar': 0.20, 'pase':0.60}
+		elif 11 <= self.ranking <= 20:
+			return {'ganar': 0.60, 'anotar': 0.50, 'encajar': 0.30, 'pase':0.50}
+		elif 21 <= self.ranking <= 30:
+			return {'ganar': 0.50, 'anotar': 0.40, 'encajar': 0.40, 'pase':0.40}
+		elif 31 <= self.ranking <= 40:
+			return {'ganar': 0.40, 'anotar': 0.30, 'encajar': 0.45, 'pase':0.35}
+		else:
+			return {'ganar': 0.30, 'anotar': 0.25, 'encajar': 0.50, 'pase':0.30}
 
 	def hacer_pases(self):
 		exitoso = True
