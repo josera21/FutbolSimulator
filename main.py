@@ -1,40 +1,15 @@
 import time
 import random
-import progressbar
 import threading
 from equipo import Equipo
 
 semaforo = threading.Lock() # Inicializamos el semaforo
 
-def valid_ranking(ranking):
-	"""Si el ranking esta bien colocado, lo retorno, si no obligo a que lo coloquen bien"""
-	if ranking.isdigit() and 1 <= int(ranking) < 100:
-		return ranking
-	else:
-		while not(ranking.isdigit() and 1 <= int(ranking) < 100):
-			print("Por favor introduce un numero valido.")
-			ranking = input("Ranking (numero del 1-99): ")
-		return ranking
-
-def cargar_informacion():
-	# Es el primer metodo que se ejecuta, aqui cargamos toda la informacion del partido
-	global equipoA, equipoB, ranking_eqA, ranking_eqB, fecha, hora
-
-	print("## Ingrese la informacion del partido ##")
-
-	equipoA = input("Nombre del equipo local: ")
-	ranking_eqA = valid_ranking(input("Ranking (numero del 1-99): "))
-
-	equipoB = input("Nombre del equipo visitante: ")
-	ranking_eqB = valid_ranking(input("Ranking (numero del 1-99): "))
-
-	fecha = input("Fecha del partido: ")
-	hora = input("Hora del partido: ")
-
 def jugar(Equipo1, Equipo2):
 	# Busco las probabilidades de encajar por cada equipo
 	prob_encajar_eq1 = Equipo1.probabilidad_encajar()
 	prob_encajar_eq2 = Equipo2.probabilidad_encajar()
+	
 
 	def jugar_equipo1(defensa_rival):
 		# Seccion critica
@@ -75,48 +50,36 @@ def sorteo_saque(equipo1, equipo2):
 
 	return equipos
 
-def tiempo_de_juego(saca_primero, defiende_primero, duracion):
-	starttime=time.time()
-	tiempo = 0
-	# creo la barra de progreso
-	bar = progressbar.ProgressBar(widgets=[
-        progressbar.Percentage(),
-        progressbar.Bar(),
-    ], max_value=duracion).start()
+def lista_equipos():
+	equipos = [('Alemania','ALEMANIA'),('Arabia Saudi','ARABIASAUDI'),('Argentina','ARGENTINA'),('Australia','AUSTRIA'),
+	('Belgica','BELGICA'),('Brasil','BRASIL'),('Colombia','COLOMBIA'),('Costa Rica','COSTARICA'),
+	('Croacia','CROACIA'),('Dinamarca','DINAMARCA'),('Egipto','EGIPTO'),('Espana','ESPANA'),
+	('Francia','FRANCIA'),('Inglaterra','INGLATERRA'),('Iran','IRAN'),('Islandia','ISLANDIA'),
+	('Japon','JAPON'),('Marruecos','MARRUECOS'),('México','MEXICO'),('Nigeria','NIGERIA'),('Panamá','PANAMA'),
+	('Peru','PERU'),('Polonia','POLONIA'),('Portugal','PORTUGAL'),('Republica de corea','REPÚBLICA DE COREA'),
+	('Rusia','RUSIA'),('Senegal','SENEGAL'),('Serbia','SERBIA'),('Suecia','SUECIA'),('Suiza','SUIZA'),
+	('Tunez','TUNEZ'),('Uruguay','URUGUAY')]
+	return equipos
 
-	# hacemos que el juego tarde aproximadamente 10seg en simularse.
-	while tiempo < duracion:
-		time.sleep(1 - ((time.time() - starttime) % 1))
+def lista_fechas():
+	fechas_partidos = [('14/06/18','14/06/18'),('15/06/18','15/06/18'),('16/06/18','16/06/18'),('17/06/18','17/06/18'),
+	('18/06/18','18/06/18'),('19/06/18','19/06/18'),('20/06/18','20/06/18'),('21/06/18','21/06/18'),
+	('22/06/18','22/06/18'),('28/06/18','28/06/18'),('30/06/18','30/06/18'),('01/07/18','01/07/18'),
+	('02/07/18','02/07/18'),('03/07/18','03/07/18'),('06/07/18','06/07/18'),('07/07/18','07/07/18'),
+	('10/07/18','10/07/18'),('11/07/18','11/07/18'),('14/07/18','14/07/18'),('15/07/18','15/07/18')]
+	return fechas_partidos
 
-		jugar(saca_primero, defiende_primero)
-		
-		tiempo = time.time() - starttime
-		bar.update(int(tiempo))
-	bar.finish() # Para que finalice la barra de progreso
+def lista_horas():
+	horas_partido = [('14:00','14:00'),('15:00','15:00'),('16:00','16:00'),('17:00','17:00'),('18:00','18:00'),
+	('19:00','19:00'),('20:00','20:00'),('21:00','21:00'),('22:00','22:00')]
+	return horas_partido
 
-def resultados_finales(equipo1, equipo2):
-	print("="*16)
-	print("FINAL DEL PARTIDO")
-	print(equipo1.nombre)
-	equipo1.mostrar_estadisticas()
-	print(equipo2.nombre)
-	equipo2.mostrar_estadisticas()
+def lista_etapas():
+	return [('Fase de Grupos','Fase de Grupos'),('8vos de Final','8vos de Final'),('4tos de Final','4tos de Final'),
+    ('Semifinales','Semifinales'),('Final','Final')]
 
-if __name__ == '__main__':
-	cargar_informacion()	
+def lista_formaciones():
+	formaciones = [('4-4-2','4-4-2'),('4-3-3','4-3-3'),('4-2-3-1','4-2-3-1'),('4-3-1-2','4-3-1-2'),('3-4-3','3-4-3'),
+	('5-3-1','5-3-1')]
+	return formaciones
 
-	eqA = Equipo(equipoA, ranking_eqA)
-	eqB = Equipo(equipoB, ranking_eqB)
-
-	eqA.cargar_probabilidades()
-	eqB.cargar_probabilidades()
-
-	result_sorteo = sorteo_saque(eqA, eqB)
-
-	saca_primero = result_sorteo["gano_balon"]
-	defiende_primero = result_sorteo["gano_cancha"]
-
-	tiempo_de_juego(saca_primero, defiende_primero, 50)
-	
-	resultados_finales(eqA, eqB) # Mostramos el resultado final del partido.
-	
