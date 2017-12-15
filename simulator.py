@@ -1,20 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # coding=utf-8
-"""
-Derechos de autor de la Libreria PygameMenu
-
-Copyright (C) 2017 Pablo Pizarro @ppizarror
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-"""
 
 # Import pygame and libraries
 from pygame.locals import *
@@ -44,7 +30,10 @@ ETAPAS =  main.lista_etapas()
 ABOUT = ['PygameMenu {0}'.format(pygameMenu.__version__),
          'Author: {0}'.format(pygameMenu.__author__),
          TEXT_NEWLINE,
-         'Email: {0}'.format(pygameMenu.__email__)]
+         'Soccer Simulator {0}'.format("v1.0"),
+         'Developers:',
+         'Jose Camacaro','Carlos Torrealba','Laura Rincon',
+         'Genesis Campos']
 
 COLOR_BACKGROUND = (128, 0, 128)
 COLOR_BLACK = (0, 0, 0)
@@ -109,14 +98,6 @@ def horas(h):
 def etapas(e):
     ETAPA[0] = e
 
-def random_color():
-    """
-    Return random color.
-    
-    :return: Color tuple
-    """
-    return randrange(0, 255), randrange(0, 255), randrange(0, 255)
-
 def load_image(filename, transparent=False):
     try: image = pygame.image.load(filename)
     except(pygame.error, message):
@@ -142,7 +123,7 @@ def eventos_de_teclado():
 def display_final(font):
     exit_font = pygame.font.Font(pygameMenu.fonts.FONT_OXYGEN, 20)
     sonido = pygame.mixer.Sound("resources/n.mp3")
-    sonido.play()
+    sonido.play() # Pitido final
 
     f_salir = exit_font.render('Presione Esc para salir', 2, COLOR_BLACK)
     f_width = f_salir.get_size()[0]
@@ -157,6 +138,7 @@ def display_final(font):
         
         surface.blit(f_salir, ((WINDOW_SIZE[0] - f_width) / 2, WINDOW_SIZE[1] / 1.1))
         pygame.display.flip()
+
 
 def jugar_function(team1, team2, rank_eq1, rank_eq2, form_eq1, form_eq2, fecha, hora, etapa, font):  
     starttime=time.time()
@@ -193,17 +175,23 @@ def jugar_function(team1, team2, rank_eq1, rank_eq2, form_eq1, form_eq2, fecha, 
     f_etapa = font.render(etapa, 1, COLOR_WHITE)
 
     # Comienza el sonido ambiente
-    pygame.mixer.music.load("resources/ambiente2.mp3")
+    pygame.mixer.music.load("resources/stadium.mp3")
     pygame.mixer.music.play(1)
 
     main_menu.disable()
     main_menu.reset(1)
 
-    while tiempo < duracion:
-        time.sleep(1 - ((time.time() - starttime) % 1))
-        minutos = int(tiempo)
+    # Para ver quien gano el saque
+    print("Saca primero: ",saca_primero.nombre)
 
-        # Definiendo los labels
+    # Comienza el partido
+    main.jugar(saca_primero, defiende_primero, duracion)
+
+    while main.partido_transcurso:
+        
+        minutos = int(main.tiempo)
+
+        # Definiendo los labels de los equipos
         nomb_team1 = font.render(eq1.nombre, 1, COLOR_WHITE)
         form_team1 = font.render(eq1.formacion, 1, COLOR_WHITE)
         goles_team1 = font.render('Goles: ' + str(eq1.goles), 1, COLOR_WHITE)
@@ -220,12 +208,6 @@ def jugar_function(team1, team2, rank_eq1, rank_eq2, form_eq1, form_eq2, fecha, 
         time_string = str(int(minutos)) + " min"
         time_blit = timer_font.render(time_string, 1, COLOR_WHITE)
         time_blit_size = time_blit.get_size()
-        
-        # Pasar los eventos al main_menu
-        main_menu.mainloop(eventos_de_teclado())
-        
-        # Se juega el partido
-        main.jugar(saca_primero, defiende_primero)
 
         # Actualizo la pantalla
         surface.blit(background_image, (0,-30))
@@ -249,8 +231,7 @@ def jugar_function(team1, team2, rank_eq1, rank_eq2, form_eq1, form_eq2, fecha, 
         surface.blit(form_team2,((WINDOW_SIZE[0] + 100) / 2, WINDOW_SIZE[1] / 1.3))
 
         pygame.display.flip() # Para mostrar los cambios en la pantalla
-
-        tiempo = time.time() - starttime # Se incrementa el tiempo transcurrido
+        time.sleep(0.01 - ((time.time() - starttime) % 0.01)) # para que el sonido no se distorsione
 
 
     main_menu.disable()
@@ -311,8 +292,8 @@ about_menu = pygameMenu.TextMenu(surface,
                                  font_size_title=30,
                                  menu_color_title=COLOR_WHITE,
                                  menu_color=MENU_BACKGROUND_COLOR,
-                                 menu_width=int(WINDOW_SIZE[0] * 0.6),
-                                 menu_height=int(WINDOW_SIZE[1] * 0.6),
+                                 menu_width=int(WINDOW_SIZE[0] * 0.9),
+                                 menu_height=int(WINDOW_SIZE[1] * 0.9),
                                  option_shadow=False,
                                  color_selected=COLOR_WHITE,
                                  text_color=COLOR_BLACK,

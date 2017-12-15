@@ -5,39 +5,55 @@ from equipo import Equipo
 
 semaforo = threading.Lock() # Inicializamos el semaforo
 
-def jugar(Equipo1, Equipo2):
+starttime = time.time()
+tiempo = 0
+partido_transcurso = True
+
+def jugar(Equipo1, Equipo2, duracion):
 	# Busco las probabilidades de encajar por cada equipo
 	prob_encajar_eq1 = Equipo1.probabilidad_encajar()
 	prob_encajar_eq2 = Equipo2.probabilidad_encajar()
-	
 
-	def jugar_equipo1(defensa_rival):
-		# Seccion critica
-		semaforo.acquire() # Bloqueo
-		if Equipo1.hacer_pases():
-			Equipo1.shoot(defensa_rival)
-		semaforo.release() # Libero
+	def jugar_equipo1(defensa_rival, duracion):
+		global tiempo, partido_transcurso
+		tiempo = 0
 
-	def jugar_equipo2(defensa_rival):
-		# Seccion critica
-		semaforo.acquire() # Bloqueo
-		if Equipo2.hacer_pases():
-			Equipo2.shoot(defensa_rival)
-		semaforo.release() # Libero
+		while tiempo < duracion:
+			time.sleep(1 - ((time.time() - starttime) % 1))
+			# Seccion critica
+			semaforo.acquire() # Bloqueo
+			if Equipo1.hacer_pases():
+				Equipo1.shoot(defensa_rival)
+			tiempo = time.time() - starttime # Se incrementa el tiempo transcurrido
+			semaforo.release() # Libero
+		# Termino el partido
+		partido_transcurso = False
+
+	def jugar_equipo2(defensa_rival, duracion):
+		global tiempo, partido_transcurso
+		tiempo = 0
+
+		while tiempo < duracion:
+			time.sleep(1 - ((time.time() - starttime) % 1))
+			# Seccion critica
+			semaforo.acquire() # Bloqueo
+			if Equipo2.hacer_pases():
+				Equipo2.shoot(defensa_rival)
+			tiempo = time.time() - starttime # Se incrementa el tiempo transcurrido
+			semaforo.release() # Libero		
+		# Termino el partido
+		partido_transcurso = False
+
 
 	# Inicializo los hilos, en target paso el metodo a ejecutar.
 	# en args paso las probabilidades de encajar del equipo rival
-	hilo_equipo1 = threading.Thread(name = 'hilo_eq1', target = jugar_equipo1, args = (prob_encajar_eq2,))
-	hilo_equipo2 = threading.Thread(name = 'hilo_eq2', target = jugar_equipo2, args = (prob_encajar_eq1,))
+	hilo_equipo1 = threading.Thread(name = 'hilo_eq1', target = jugar_equipo1, args = (prob_encajar_eq2,duracion,))
+	hilo_equipo2 = threading.Thread(name = 'hilo_eq2', target = jugar_equipo2, args = (prob_encajar_eq1,duracion,))
 
 	# Se ejecutan ambos hilos
 	hilo_equipo1.start()
 	hilo_equipo2.start()
 
-	# Si no utilizo el join, entonces el hilo principal de Python (que hace que se ejecute el programa)
-	# No esperara a que terminen de ejecutarse los hilos "hijos" y el programa terminara antes.
-	hilo_equipo1.join()
-	hilo_equipo2.join()
 
 def sorteo_saque(equipo1, equipo2):
 	lista = [equipo1, equipo2]
@@ -51,8 +67,8 @@ def sorteo_saque(equipo1, equipo2):
 	return equipos
 
 def lista_equipos():
-	equipos = [('Alemania','ALEMANIA'),('Arabia Saudi','ARABIASAUDI'),('Argentina','ARGENTINA'),('Australia','AUSTRIA'),
-	('Belgica','BELGICA'),('Brasil','BRASIL'),('Colombia','COLOMBIA'),('Costa Rica','COSTARICA'),
+	equipos = [('Alemania','ALEMANIA'),('Arabia Saudi','ARABIASAUDI'),('Argentina','ARGENTINA'),('Australia','AUSTRALIA'),
+	('Belgica','BELGICA'),('Brasil','BRASIL'),('Colombia','COLOMBIA'),('Costa Rica','COSTA RICA'),
 	('Croacia','CROACIA'),('Dinamarca','DINAMARCA'),('Egipto','EGIPTO'),('Espana','ESPANA'),
 	('Francia','FRANCIA'),('Inglaterra','INGLATERRA'),('Iran','IRAN'),('Islandia','ISLANDIA'),
 	('Japon','JAPON'),('Marruecos','MARRUECOS'),('México','MEXICO'),('Nigeria','NIGERIA'),('Panamá','PANAMA'),
@@ -82,4 +98,3 @@ def lista_formaciones():
 	formaciones = [('4-4-2','4-4-2'),('4-3-3','4-3-3'),('4-2-3-1','4-2-3-1'),('4-3-1-2','4-3-1-2'),('3-4-3','3-4-3'),
 	('5-3-1','5-3-1')]
 	return formaciones
-

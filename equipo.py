@@ -36,17 +36,15 @@ class Equipo(object):
 			return {'ganar': 0.30, 'anotar': 0.25, 'encajar': 0.50, 'pase':0.30}
 
 	def hacer_pases(self):
-		exitoso = True
 		cont_pase = 0
 
-		while exitoso and cont_pase < 4:
+		while cont_pase < 4:
 			pase = random.randint(0,100) + (self.prob_pase * 100)
 			
 			if pase >= 100:
 				cont_pase = cont_pase + 1
 				self.__actualizar_pases()
 			else:
-				exitoso = False
 				return False
 
 		if cont_pase == 4:
