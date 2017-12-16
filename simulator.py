@@ -40,7 +40,7 @@ COLOR_BLACK = (0, 0, 0)
 COLOR_WHITE = (255, 255, 255)
 FPS = 60.0
 MENU_BACKGROUND_COLOR = (228, 55, 36)
-WINDOW_SIZE = (640, 480)
+WINDOW_SIZE = (700, 540)
 
 # -----------------------------------------------------------------------------
 # Init pygame
@@ -163,6 +163,8 @@ def jugar_function(team1, team2, rank_eq1, rank_eq2, form_eq1, form_eq2, fecha, 
     eq1.cargar_probabilidades()
     eq2.cargar_probabilidades()
 
+    prediccion = main.prediccion_partido(eq1, eq2)
+
     result_sorteo = main.sorteo_saque(eq1, eq2)
 
     saca_primero = result_sorteo["gano_balon"]
@@ -170,12 +172,13 @@ def jugar_function(team1, team2, rank_eq1, rank_eq2, form_eq1, form_eq2, fecha, 
 
     # Carga la imagen de fondo 
     background_image = load_image('resources/wall2.jpg')
+    f_prediccion = font.render("Favorito: " + prediccion, 1, COLOR_WHITE)
     f_fecha = font.render(fecha, 1, COLOR_WHITE)
     f_hora = font.render(hora + "h", 1, COLOR_WHITE)
     f_etapa = font.render(etapa, 1, COLOR_WHITE)
 
     # Comienza el sonido ambiente
-    pygame.mixer.music.load("resources/stadium.mp3")
+    pygame.mixer.music.load("resources/crowdSound.mp3")
     pygame.mixer.music.play(1)
 
     main_menu.disable()
@@ -211,6 +214,7 @@ def jugar_function(team1, team2, rank_eq1, rank_eq2, form_eq1, form_eq2, fecha, 
 
         # Actualizo la pantalla
         surface.blit(background_image, (0,-30))
+        surface.blit(f_prediccion, (WINDOW_SIZE[0] / 2, 120))
         surface.blit(f_etapa, (WINDOW_SIZE[0] / 2, 0))
         surface.blit(f_fecha, (WINDOW_SIZE[0] / 2, 40))
         surface.blit(f_hora, (WINDOW_SIZE[0] / 2, 78))

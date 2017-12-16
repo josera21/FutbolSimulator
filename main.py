@@ -5,18 +5,21 @@ from equipo import Equipo
 
 semaforo = threading.Lock() # Inicializamos el semaforo
 
-starttime = time.time()
-tiempo = 0
 partido_transcurso = True
+tiempo = 0
 
 def jugar(Equipo1, Equipo2, duracion):
+	starttime = time.time()
+	global tiempo, partido_transcurso
+	partido_transcurso = True
+	tiempo = 0
+
 	# Busco las probabilidades de encajar por cada equipo
 	prob_encajar_eq1 = Equipo1.probabilidad_encajar()
 	prob_encajar_eq2 = Equipo2.probabilidad_encajar()
 
 	def jugar_equipo1(defensa_rival, duracion):
 		global tiempo, partido_transcurso
-		tiempo = 0
 
 		while tiempo < duracion:
 			time.sleep(1 - ((time.time() - starttime) % 1))
@@ -31,7 +34,6 @@ def jugar(Equipo1, Equipo2, duracion):
 
 	def jugar_equipo2(defensa_rival, duracion):
 		global tiempo, partido_transcurso
-		tiempo = 0
 
 		while tiempo < duracion:
 			time.sleep(1 - ((time.time() - starttime) % 1))
@@ -66,6 +68,17 @@ def sorteo_saque(equipo1, equipo2):
 
 	return equipos
 
+def prediccion_partido(equipo1, equipo2):
+	prob_ganar_equipo1 = (equipo1.prob_ganar * 100) + random.randint(0,25)
+	prob_ganar_equipo2 = (equipo2.prob_ganar * 100) + random.randint(0,25)
+
+	if prob_ganar_equipo1 > prob_ganar_equipo2:
+		return equipo1.nombre
+	elif prob_ganar_equipo1 == prob_ganar_equipo2:
+		return random.choice([equipo1.nombre, equipo2.nombre])
+	else:
+		return equipo2.nombre
+
 def lista_equipos():
 	equipos = [('Alemania','ALEMANIA'),('Arabia Saudi','ARABIASAUDI'),('Argentina','ARGENTINA'),('Australia','AUSTRALIA'),
 	('Belgica','BELGICA'),('Brasil','BRASIL'),('Colombia','COLOMBIA'),('Costa Rica','COSTA RICA'),
@@ -92,7 +105,7 @@ def lista_horas():
 
 def lista_etapas():
 	return [('Fase de Grupos','Fase de Grupos'),('8vos de Final','8vos de Final'),('4tos de Final','4tos de Final'),
-    ('Semifinales','Semifinales'),('Final','Final')]
+    ('Semifinales','Semifinales'),('Tercer puesto','Tercer puesto'),('Final','Final')]
 
 def lista_formaciones():
 	formaciones = [('4-4-2','4-4-2'),('4-3-3','4-3-3'),('4-2-3-1','4-2-3-1'),('4-3-1-2','4-3-1-2'),('3-4-3','3-4-3'),
