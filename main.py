@@ -23,7 +23,9 @@ def jugar(Equipo1, Equipo2, duracion):
 
 		while tiempo < duracion:
 			time.sleep(1 - ((time.time() - starttime) % 1))
+			
 			semaforo.acquire() # Bloqueo
+			
 			if Equipo1.hacer_pases():
 				Equipo1.shoot(defensa_rival)
 			tiempo = time.time() - starttime # Se incrementa el tiempo transcurrido
@@ -39,9 +41,11 @@ def jugar(Equipo1, Equipo2, duracion):
 			time.sleep(1 - ((time.time() - starttime) % 1))
 			
 			semaforo.acquire() # Bloqueo
+			
 			if Equipo2.hacer_pases():
 				Equipo2.shoot(defensa_rival)
 			tiempo = time.time() - starttime # Se incrementa el tiempo transcurrido
+			
 			semaforo.release() # Libero		
 		
 		partido_transcurso = False # Termino el partido
