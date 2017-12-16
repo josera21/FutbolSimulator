@@ -23,28 +23,28 @@ def jugar(Equipo1, Equipo2, duracion):
 
 		while tiempo < duracion:
 			time.sleep(1 - ((time.time() - starttime) % 1))
-			# Seccion critica
 			semaforo.acquire() # Bloqueo
 			if Equipo1.hacer_pases():
 				Equipo1.shoot(defensa_rival)
 			tiempo = time.time() - starttime # Se incrementa el tiempo transcurrido
+			
 			semaforo.release() # Libero
-		# Termino el partido
-		partido_transcurso = False
+		
+		partido_transcurso = False # Termino el partido
 
 	def jugar_equipo2(defensa_rival, duracion):
 		global tiempo, partido_transcurso
 
 		while tiempo < duracion:
 			time.sleep(1 - ((time.time() - starttime) % 1))
-			# Seccion critica
+			
 			semaforo.acquire() # Bloqueo
 			if Equipo2.hacer_pases():
 				Equipo2.shoot(defensa_rival)
 			tiempo = time.time() - starttime # Se incrementa el tiempo transcurrido
 			semaforo.release() # Libero		
-		# Termino el partido
-		partido_transcurso = False
+		
+		partido_transcurso = False # Termino el partido
 
 
 	# Inicializo los hilos, en target paso el metodo a ejecutar.

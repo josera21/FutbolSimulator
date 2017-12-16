@@ -172,6 +172,7 @@ def jugar_function(team1, team2, rank_eq1, rank_eq2, form_eq1, form_eq2, fecha, 
 
     # Carga la imagen de fondo 
     background_image = load_image('resources/wall2.jpg')
+    ball_image = load_image('resources/SoccerBall.png', True)
     f_prediccion = font.render("Favorito: " + prediccion, 1, COLOR_WHITE)
     f_fecha = font.render(fecha, 1, COLOR_WHITE)
     f_hora = font.render(hora + "h", 1, COLOR_WHITE)
@@ -218,24 +219,29 @@ def jugar_function(team1, team2, rank_eq1, rank_eq2, form_eq1, form_eq2, fecha, 
         surface.blit(f_etapa, (WINDOW_SIZE[0] / 2, 0))
         surface.blit(f_fecha, (WINDOW_SIZE[0] / 2, 40))
         surface.blit(f_hora, (WINDOW_SIZE[0] / 2, 78))
-        
+
         surface.blit(time_blit, (
             WINDOW_SIZE[0] / 2 - time_blit_size[0] / 2, WINDOW_SIZE[1] / 2 - time_blit_size[1] / 1))
 
+        if eq1.balon:
+            surface.blit(ball_image,((WINDOW_SIZE[0] - 500) / 2, WINDOW_SIZE[1] / 1.2))
         surface.blit(nomb_team1,((WINDOW_SIZE[0] - 500) / 2, WINDOW_SIZE[1] / 2))
         surface.blit(goles_team1,((WINDOW_SIZE[0] - 500) / 2, WINDOW_SIZE[1] / 1.7))
         surface.blit(fallidos_team1,((WINDOW_SIZE[0] - 500) / 2, WINDOW_SIZE[1] / 1.55))
         surface.blit(pases_team1,((WINDOW_SIZE[0] - 500) / 2, WINDOW_SIZE[1] / 1.4))
         surface.blit(form_team1,((WINDOW_SIZE[0] - 500) / 2, WINDOW_SIZE[1] / 1.3))
-
+        
+        if eq2.balon:
+            surface.blit(ball_image,((WINDOW_SIZE[0] + 100) / 2, WINDOW_SIZE[1] / 1.2))
         surface.blit(nomb_team2,((WINDOW_SIZE[0] + 100) / 2, WINDOW_SIZE[1] / 2))
         surface.blit(goles_team2,((WINDOW_SIZE[0] + 100) / 2, WINDOW_SIZE[1] / 1.7))
         surface.blit(fallidos_team2,((WINDOW_SIZE[0] + 100) / 2, WINDOW_SIZE[1] / 1.55))
         surface.blit(pases_team2,((WINDOW_SIZE[0] + 100) / 2, WINDOW_SIZE[1] / 1.4))
         surface.blit(form_team2,((WINDOW_SIZE[0] + 100) / 2, WINDOW_SIZE[1] / 1.3))
-
+        
         pygame.display.flip() # Para mostrar los cambios en la pantalla
-        time.sleep(0.01 - ((time.time() - starttime) % 0.01)) # para que el sonido no se distorsione
+        
+        time.sleep(0.1 - ((time.time() - starttime) % 0.1)) # para que el sonido no se distorsione
 
 
     main_menu.disable()
