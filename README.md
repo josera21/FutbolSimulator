@@ -19,10 +19,10 @@ you can selected two teams and see who win the game in 90 seconds.
 ## Screenshots
 
   ## Main Menu
-  <img src="https://k60.kn3.net/C10308E31.png" width="60%">
+  <img src="https://k60.kn3.net/7/2/6/5/7/7/4BA.png" width="80%">
   
   ## Play menu
-  <img src="https://k60.kn3.net/BBD115213.png" width="60%">
+  <img src="https://k60.kn3.net/6/E/5/0/C/D/15D.png" width="80%">
   
   ## Game display
-  <img src="https://k60.kn3.net/8435D4AD6.png" width="60%">
+  <img src="https://k60.kn3.net/4/9/7/5/8/8/8A8.png" width="80%">
