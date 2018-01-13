@@ -68,13 +68,13 @@ class Equipo(object):
 		self.pierdo_balon()
 
 	def __actualizar_goles(self):
-		self.goles = self.goles + 1
+		self.goles += 1
 
 	def __actualizar_remates_fuera(self):
-		self.fallidos = self.fallidos + 1
+		self.fallidos += 1
 
 	def __actualizar_pases(self):
-		self.pases_exitosos = self.pases_exitosos + 1
+		self.pases_exitosos += 1
 
 	def tengo_balon(self):
 		self.balon = True
