@@ -7,11 +7,15 @@ semaforo = threading.Lock() # Inicializamos el semaforo
 
 partido_transcurso = True
 tiempo = 0
+team1_end = False
+team2_end = False
 
 def jugar(Equipo1, Equipo2, duracion):
 	starttime = time.time()
-	global tiempo, partido_transcurso
+	global tiempo, partido_transcurso, team1_end, team2_end
 	partido_transcurso = True
+	team1_end = False
+	team2_end = False
 	tiempo = 0
 
 	# Busco las probabilidades de encajar por cada equipo
@@ -19,9 +23,9 @@ def jugar(Equipo1, Equipo2, duracion):
 	prob_encajar_eq2 = Equipo2.probabilidad_encajar()
 
 	def jugar_equipo1(defensa_rival, duracion):
-		global tiempo, partido_transcurso
+		global tiempo, team1_end
 
-		while tiempo < duracion:
+		while int(tiempo) < duracion:
 			time.sleep(1 - ((time.time() - starttime) % 1))
 			
 			semaforo.acquire() # Bloqueo
@@ -32,12 +36,13 @@ def jugar(Equipo1, Equipo2, duracion):
 			
 			semaforo.release() # Libero
 		
-		partido_transcurso = False # Termino el partido
+		team1_end = True
+		end_game() # Para comprobar si ambos hilos terminaron
 
 	def jugar_equipo2(defensa_rival, duracion):
-		global tiempo, partido_transcurso
+		global tiempo, team2_end
 
-		while tiempo < duracion:
+		while int(tiempo) < duracion:
 			time.sleep(1 - ((time.time() - starttime) % 1))
 			
 			semaforo.acquire() # Bloqueo
@@ -48,8 +53,13 @@ def jugar(Equipo1, Equipo2, duracion):
 			
 			semaforo.release() # Libero		
 		
-		partido_transcurso = False # Termino el partido
+		team2_end = True
+		end_game()
 
+	def end_game():
+		global partido_transcurso, team1_end, team2_end
+		if team1_end and team2_end:
+			partido_transcurso = False # Flag que indica el final del partido
 
 	# Inicializo los hilos, en target paso el metodo a ejecutar.
 	# en args paso las probabilidades de encajar del equipo rival

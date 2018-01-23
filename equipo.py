@@ -4,7 +4,7 @@ import pygame
 from pygame.locals import *
 
 class Equipo(object):
-	"""En los metodos hacer_pases y shoot se utiliza un sleep de 0.01 seg
+	"""En los metodos hacer_pases y shoot se utiliza un sleep de 0.1 seg
 		Para que pueda apreciarse la posesion del balon en la interfaz
 	"""
 
@@ -13,7 +13,7 @@ class Equipo(object):
 		self.nombre = nombre
 		self.ranking = int(ranking)
 		self.formacion = formacion
-		self.pases_exitosos = 0 
+		self.pases_exitosos = 0
 		self.goles = 0
 		self.fallidos = 0
 		self.balon = False
@@ -43,9 +43,9 @@ class Equipo(object):
 
 		while cont_pase < 4:
 			self.tengo_balon()
-			time.sleep(0.01)
+			time.sleep(0.1)
 			pase = random.randint(0,100) + (self.prob_pase * 100)
-			
+
 			if pase >= 100:
 				cont_pase = cont_pase + 1
 				self.__actualizar_pases()
@@ -55,10 +55,10 @@ class Equipo(object):
 
 		if cont_pase == 4:
 			return True
-		
+
 	def shoot(self, prob_encajarB):
 		self.tengo_balon()
-		time.sleep(0.01)
+		time.sleep(0.1)
 		shoot =  random.randint(0,100) + (self.prob_anotar*100) + (prob_encajarB*100)
 
 		if shoot >= 150:
@@ -87,5 +87,3 @@ class Equipo(object):
 
 	def mostrar_estadisticas(self):
 		print("Goles: ", self.goles, "\n Fallidos: ", self.fallidos)
-
-	

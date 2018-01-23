@@ -140,67 +140,68 @@ def display_final(font):
         pygame.display.flip()
 
 
-def display_game(Equipo1, Equipo2, minutos, background, ball, prediccion, fecha, hora, etapa, font, 
-                extra_tiempo = False):
+def display_game(Equipo1, Equipo2, minutos, background, ball, prediccion, fecha, hora, 
+                etapa, font, extra_tiempo = False):
         
-        if extra_tiempo:
-            f_extra = font.render("Extra tiempo", 1, COLOR_WHITE)
-        else:
-            f_extra = font.render("", 1, COLOR_WHITE)
+    if extra_tiempo:
+        f_extra = font.render("Extra tiempo", 1, COLOR_WHITE)
+    else:
+        f_extra = font.render("", 1, COLOR_WHITE)
 
-        # Definiendo los labels de los equipos
-        nomb_team1 = font.render(Equipo1.nombre, 1, COLOR_WHITE)
-        form_team1 = font.render(Equipo1.formacion, 1, COLOR_WHITE)
-        goles_team1 = font.render('Goles: ' + str(Equipo1.goles), 1, COLOR_WHITE)
-        fallidos_team1 = font.render('Remates fuera: ' + str(Equipo1.fallidos), 1, COLOR_WHITE)
-        pases_team1 = font.render('Pases exitosos: ' + str(Equipo1.pases_exitosos), 1, COLOR_WHITE)
-        
-        nomb_team2 = font.render(Equipo2.nombre, 1, COLOR_WHITE)
-        form_team2 = font.render(Equipo2.formacion, 1, COLOR_WHITE)
-        goles_team2 = font.render('Goles: ' + str(Equipo2.goles), 1, COLOR_WHITE)
-        fallidos_team2 = font.render('Remates fuera: ' + str(Equipo2.fallidos), 1, COLOR_WHITE)
-        pases_team2 = font.render('Pases exitosos: ' + str(Equipo2.pases_exitosos), 1, COLOR_WHITE)
+    # Definiendo los labels de los equipos
+    nomb_team1 = font.render(Equipo1.nombre, 1, COLOR_WHITE)
+    form_team1 = font.render(Equipo1.formacion, 1, COLOR_WHITE)
+    goles_team1 = font.render('Goles: ' + str(Equipo1.goles), 1, COLOR_WHITE)
+    fallidos_team1 = font.render('Remates fuera: ' + str(Equipo1.fallidos), 1, COLOR_WHITE)
+    pases_team1 = font.render('Pases exitosos: ' + str(Equipo1.pases_exitosos), 1, COLOR_WHITE)
+    
+    nomb_team2 = font.render(Equipo2.nombre, 1, COLOR_WHITE)
+    form_team2 = font.render(Equipo2.formacion, 1, COLOR_WHITE)
+    goles_team2 = font.render('Goles: ' + str(Equipo2.goles), 1, COLOR_WHITE)
+    fallidos_team2 = font.render('Remates fuera: ' + str(Equipo2.fallidos), 1, COLOR_WHITE)
+    pases_team2 = font.render('Pases exitosos: ' + str(Equipo2.pases_exitosos), 1, COLOR_WHITE)
 
-        # Dibujar tiempo
-        time_string = str(int(minutos)) + " min"
-        time_blit = timer_font.render(time_string, 1, COLOR_WHITE)
-        time_blit_size = time_blit.get_size()
+    # Dibujar tiempo
+    time_string = str(int(minutos)) + " min"
+    time_blit = timer_font.render(time_string, 1, COLOR_WHITE)
+    time_blit_size = time_blit.get_size()
 
-        # Actualizo la pantalla
-        surface.blit(background, (-180,0))
-        surface.blit(prediccion, (WINDOW_SIZE[0] / 1.45, 0))
-        surface.blit(f_extra, (WINDOW_SIZE[0] / 2.4, WINDOW_SIZE[1] / 3.5))
+    # Actualizo la pantalla
+    surface.blit(background, (-180,0))
+    surface.blit(prediccion, (WINDOW_SIZE[0] / 1.45, 0))
+    surface.blit(f_extra, (WINDOW_SIZE[0] / 2.4, WINDOW_SIZE[1] / 3.5))
 
-        surface.blit(etapa, (WINDOW_SIZE[0] / 18, 0))
-        surface.blit(fecha, (WINDOW_SIZE[0] / 18, 40))
-        surface.blit(hora, (WINDOW_SIZE[0] / 18, 78))
-        
+    surface.blit(etapa, (WINDOW_SIZE[0] / 18, 0))
+    surface.blit(fecha, (WINDOW_SIZE[0] / 18, 40))
+    surface.blit(hora, (WINDOW_SIZE[0] / 18, 78))
+    
 
-        surface.blit(time_blit, (
-            WINDOW_SIZE[0] / 2 - time_blit_size[0] / 2, WINDOW_SIZE[1] / 2 - time_blit_size[1] / 1))
+    surface.blit(time_blit, (
+        WINDOW_SIZE[0] / 2 - time_blit_size[0] / 2, WINDOW_SIZE[1] / 2 - time_blit_size[1] / 1))
 
-        if Equipo1.balon:
-            surface.blit(ball,((WINDOW_SIZE[0] - 600) / 2, WINDOW_SIZE[1] / 1.2))
-        surface.blit(nomb_team1,((WINDOW_SIZE[0] - 600) / 2, WINDOW_SIZE[1] / 2))
-        surface.blit(goles_team1,((WINDOW_SIZE[0] - 600) / 2, WINDOW_SIZE[1] / 1.7))
-        surface.blit(fallidos_team1,((WINDOW_SIZE[0] - 600) / 2, WINDOW_SIZE[1] / 1.55))
-        surface.blit(pases_team1,((WINDOW_SIZE[0] - 600) / 2, WINDOW_SIZE[1] / 1.4))
-        surface.blit(form_team1,((WINDOW_SIZE[0] - 600) / 2, WINDOW_SIZE[1] / 1.3))
-        
-        if Equipo2.balon:
-            surface.blit(ball,((WINDOW_SIZE[0] + 200) / 2, WINDOW_SIZE[1] / 1.2))
-        surface.blit(nomb_team2,((WINDOW_SIZE[0] + 200) / 2, WINDOW_SIZE[1] / 2))
-        surface.blit(goles_team2,((WINDOW_SIZE[0] + 200) / 2, WINDOW_SIZE[1] / 1.7))
-        surface.blit(fallidos_team2,((WINDOW_SIZE[0] + 200) / 2, WINDOW_SIZE[1] / 1.55))
-        surface.blit(pases_team2,((WINDOW_SIZE[0] + 200) / 2, WINDOW_SIZE[1] / 1.4))
-        surface.blit(form_team2,((WINDOW_SIZE[0] + 200) / 2, WINDOW_SIZE[1] / 1.3))
-        
-        pygame.display.flip() # Para mostrar los cambios en la pantalla
+    if Equipo1.balon:
+        surface.blit(ball,((WINDOW_SIZE[0] - 600) / 2, WINDOW_SIZE[1] / 1.2))
+    surface.blit(nomb_team1,((WINDOW_SIZE[0] - 600) / 2, WINDOW_SIZE[1] / 2))
+    surface.blit(goles_team1,((WINDOW_SIZE[0] - 600) / 2, WINDOW_SIZE[1] / 1.7))
+    surface.blit(fallidos_team1,((WINDOW_SIZE[0] - 600) / 2, WINDOW_SIZE[1] / 1.55))
+    surface.blit(pases_team1,((WINDOW_SIZE[0] - 600) / 2, WINDOW_SIZE[1] / 1.4))
+    surface.blit(form_team1,((WINDOW_SIZE[0] - 600) / 2, WINDOW_SIZE[1] / 1.3))
+    
+    if Equipo2.balon:
+        surface.blit(ball,((WINDOW_SIZE[0] + 200) / 2, WINDOW_SIZE[1] / 1.2))
+    surface.blit(nomb_team2,((WINDOW_SIZE[0] + 200) / 2, WINDOW_SIZE[1] / 2))
+    surface.blit(goles_team2,((WINDOW_SIZE[0] + 200) / 2, WINDOW_SIZE[1] / 1.7))
+    surface.blit(fallidos_team2,((WINDOW_SIZE[0] + 200) / 2, WINDOW_SIZE[1] / 1.55))
+    surface.blit(pases_team2,((WINDOW_SIZE[0] + 200) / 2, WINDOW_SIZE[1] / 1.4))
+    surface.blit(form_team2,((WINDOW_SIZE[0] + 200) / 2, WINDOW_SIZE[1] / 1.3))
+    
+    pygame.display.flip() # Para mostrar los cambios en la pantalla
 
 def jugar_function(team1, team2, rank_eq1, rank_eq2, form_eq1, form_eq2, fecha, hora, etapa, font):  
     starttime=time.time()
     tiempo = 0
-    duracion = 91
+    duracion = 90
+    duracion_extra = 30
     fecha = fecha[0]
     hora = hora[0]
     etapa = etapa[0]
@@ -235,10 +236,11 @@ def jugar_function(team1, team2, rank_eq1, rank_eq2, form_eq1, form_eq2, fecha, 
     f_hora = font.render(hora + "h", 1, COLOR_WHITE)
     f_etapa = font.render(etapa, 1, COLOR_WHITE)
 
-    # Comienza el sonido ambiente
     pygame.mixer.music.load("resources/crowdSound.mp3")
-    pygame.mixer.music.play(1)
-
+    pygame.mixer.music.set_volume(0.8)
+    # Comienza el sonido ambiente
+    pygame.mixer.music.play()
+    
     main_menu.disable()
     main_menu.reset(1)
 
@@ -254,19 +256,18 @@ def jugar_function(team1, team2, rank_eq1, rank_eq2, form_eq1, form_eq2, fecha, 
         display_game(eq1, eq2, minutos, background_image, ball_image, f_prediccion, f_fecha,
                     f_hora, f_etapa, font)
         
-        time.sleep(0.1 - ((time.time() - starttime) % 0.1)) # para que el sonido no se distorsione
+        #time.sleep(0.1 - ((time.time() - starttime) % 0.1)) # para que el sonido no se distorsione
 
     # Compruebo si hay extra-tiempo
     if eq1.goles == eq2.goles and etapa != "Fase de Grupos":
-        main.jugar(defiende_primero, saca_primero, 31)
-
+        main.jugar(defiende_primero, saca_primero, duracion_extra)
+        
         while main.partido_transcurso:
             minutos = int(main.tiempo)
-
             display_game(eq1, eq2, minutos, background_image, ball_image, f_prediccion, f_fecha,
                     f_hora, f_etapa, font, True)
         
-            time.sleep(0.1 - ((time.time() - starttime) % 0.1)) # para que el sonido no se distorsione
+            #time.sleep(0.1 - ((time.time() - starttime) % 0.1)) # para que el sonido no se distorsione
 
     main_menu.disable()
     main_menu.reset(1)
