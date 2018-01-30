@@ -15,6 +15,10 @@ you can selected two teams and see who win the game in 90 seconds.
 
 **if you have troubles installing pygame go to this [link](https://www.pygame.org/wiki/GettingStarted#Pygame%20Installation)**
 
+## Instructions for Run
+1. __Go to the root folder of the project__
+2. __Run:__ `python3 simulator.py`
+3. __All done!__
 
 ## Screenshots
 
